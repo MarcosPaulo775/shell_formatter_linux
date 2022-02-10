@@ -4,6 +4,7 @@ declare -A mapFlatpak
 mapFlatpak["Anydesk"]="flatpak install flathub com.anydesk.Anydesk -y"
 mapFlatpak["Blanket"]="flatpak install flathub com.rafaelmardojai.Blanket -y"
 mapFlatpak["Blender"]="flatpak install flathub org.blender.Blender -y"
+mapFlatpak["Boxes"]="flatpak install flathub org.gnome.Boxes -y"
 mapFlatpak["ColorPicker"]="flatpak install flathub nl.hjdskes.gcolor3 -y"
 mapFlatpak["DBeaverCommunity"]="flatpak install flathub io.dbeaver.DBeaverCommunity -y"
 mapFlatpak["Darktable"]="flatpak install flathub org.darktable.Darktable -y"
@@ -14,16 +15,19 @@ mapFlatpak["Figma"]="flatpak install flathub io.github.Figma_Linux.figma_linux -
 mapFlatpak["Filezilla"]="flatpak install flathub org.filezillaproject.Filezilla -y"
 mapFlatpak["Flameshot"]="flatpak install flathub org.flameshot.Flameshot -y"
 mapFlatpak["GIMP"]="flatpak install flathub org.gimp.GIMP -y"
-mapFlatpak["GIMPMANUAL"]="flatpak install flathub org.gimp.GIMP.Manual -y"
+mapFlatpak["GIMP_Plugins"]="flatpak install flathub org.gimp.GIMP.Plugin.BIMP 2-40 -y && flatpak install flathub org.gimp.GIMP.Plugin.FocusBlur 2-40 -y && flatpak install flathub org.gimp.GIMP.Plugin.Fourier 2-40 -y && flatpak install flathub org.gimp.GIMP.Plugin.GMic 2-40 -y && flatpak install flathub org.gimp.GIMP.Plugin.Lensfun 2-40 -y && flatpak install flathub org.gimp.GIMP.Plugin.LiquidRescale 2-40 -y && flatpak install flathub org.gimp.GIMP.Plugin.Resynthesizer 2-40 -y"
 mapFlatpak["Glimpse"]="flatpak install flathub org.glimpse_editor.Glimpse -y"
 mapFlatpak["GravitDesigner"]="flatpak install flathub io.designer.GravitDesigner -y"
 mapFlatpak["GtkStressTesting"]="flatpak install flathub com.leinardi.gst -y"
 mapFlatpak["Inkscape"]="flatpak install flathub org.inkscape.Inkscape -y"
 mapFlatpak["Insomnia"]="flatpak install flathub rest.insomnia.Insomnia -y"
 mapFlatpak["Krita"]="flatpak install flathub org.kde.krita -y"
+mapFlatpak["Minder"]="flatpak install flathub com.github.phase1geo.minder -y"
+mapFlatpak["Motrix"]="flatpak install flathub net.agalwood.Motrix -y"
 mapFlatpak["OBSStudio"]="flatpak install flathub com.obsproject.Studio -y"
 mapFlatpak["ONLYOFFICE"]="flatpak install flathub org.onlyoffice.desktopeditors -y"
 mapFlatpak["Peek"]="flatpak install flathub com.uploadedlobster.peek -y"
+mapFlatpak["Postman"]="flatpak install flathub com.getpostman.Postman -y"
 mapFlatpak["Remmina"]="flatpak install flathub org.remmina.Remmina -y"
 mapFlatpak["RetroArch"]="flatpak install flathub org.libretro.RetroArch -y"
 mapFlatpak["Scribus"]="flatpak install flathub net.scribus.Scribus -y"
@@ -31,6 +35,7 @@ mapFlatpak["Shotcut"]="flatpak install flathub org.shotcut.Shotcut -y"
 mapFlatpak["SpaceCadetPinball"]="flatpak install flathub com.github.k4zmu2a.spacecadetpinball -y"
 mapFlatpak["Spotify"]="flatpak install flathub com.spotify.Client -y"
 mapFlatpak["Steam"]="flatpak install flathub com.valvesoftware.Steam -y"
+mapFlatpak["SweetHome3D"]="flatpak install flathub com.sweethome3d.Sweethome3d -y"
 mapFlatpak["VLC"]="flatpak install flathub org.videolan.VLC -y"
 mapFlatpak["VideoDownloader"]="flatpak install flathub com.github.unrud.VideoDownloader -y"
 
@@ -59,16 +64,6 @@ function appsFlatpak(){
   position=$((1))
 
   (
-  
-  echo "# Verificando instalação do flatpak"
-  if ! eval flatpak --version
-    then
-      echo "# Flatpak não instalado"; sleep 1
-      # eval "sudo apt install flatpak";
-      # Criar func para instalação do flatpak q recebe no param o SO?
-
-  fi
-
   for i in ${flatpaks[@]}; 
     do 
       echo "$(($porc * $position))" ; sleep 1
@@ -85,14 +80,15 @@ function appsFlatpak(){
   --text="Inicializando instalação..." \
   --percentage=0
 
+  resp=$?
   # Tratamentos da resposta do dialog;
-  if [ "$?" = 1 ] ; then
+  if [ $resp = 1 ]; then
     zenity --warning --ellipsize --text="Instalação cancelada com sucesso!"
-  elif [ "$?" = -1 ] ; then
+  elif [ $resp = -1 ]; then
     zenity --error --ellipsize --text="Erro desconhecido durante a instalação!."
-  elif [ "$?" = 0 ] ; then
+  elif [ $resp = 0 ]; then
     zenity --info --ellipsize --text="Aplicativos Flatpak instalados com sucesso!"
-  elif [ "$?" = 5 ] ; then
+  elif [ $resp = 5 ]; then
     zenity --error --ellipsize --text="A caixa de diálogo foi fechada porque o tempo limite foi atingido."
   else
     zenity --error --ellipsize --text="Erro desconhecido!"

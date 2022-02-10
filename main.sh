@@ -1,23 +1,24 @@
 #!/bin/bash
 source flatpakPrograms.sh
+source snapPrograms.sh
 
 # Variáveis
-SO='';
+packageType='';
 
 
-# Selecionando SO
-SO=$(zenity  --list  --text "Selecione o seu sistema" \
+# Selecionando packageType
+packageType=$(zenity  --list  --text "Selecione o tipo de aplicativos que deseja instalar" \
     --radiolist \
     --column "" \
     --column "Sistemas" \
-    TRUE Ubuntu FALSE Fedora);
+    TRUE Flatpak FALSE Snap);
 
-if [ $SO == "Ubuntu" ];
+if [ $packageType == "Flatpak" ];
 then
     appsFlatpak
-elif [ $SO == "Fedora" ]
+elif [ $packageType == "Snap" ]
 then
-    appsFlatpak
+    appsSnap
 else
     echo "Cancelado com sucesso!"
 fi
